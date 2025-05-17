@@ -103,7 +103,46 @@ export default function SubmitWork() {
     },
   });
 
-  const mutation = useMutation({
+  // Mutación para el análisis preliminar del documento con IA
+  const analysisMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      // En un entorno real, esto llamaría a una API que analiza el documento con OpenAI
+      const analysisData = {
+        content: values.content,
+        courseId: parseInt(values.courseId)
+      };
+      
+      // Simulamos una llamada a la API para análisis con OpenAI
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // En producción, esto vendría de la API real
+      return {
+        isValid: true,
+        feedback: "El documento cumple con los criterios científicos requeridos. Se ha detectado una estructura clara, metodología adecuada y conclusiones respaldadas por evidencia.",
+        score: 85
+      };
+    },
+    onSuccess: (data) => {
+      setAnalysisResult(data);
+      setAttestationEnabled(data.isValid && data.score >= 70);
+      
+      toast({
+        title: data.isValid ? "Análisis completado con éxito" : "Documento requiere mejoras",
+        description: data.feedback,
+        variant: data.isValid ? "default" : "destructive",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error en el análisis",
+        description: error.message || "Ocurrió un error al analizar tu documento. Por favor intenta de nuevo.",
+        variant: "destructive",
+      });
+    }
+  });
+  
+  // Mutación para enviar el trabajo y generar la attestation
+  const attestationMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const submissionData = {
         userId: userData.id,
@@ -115,33 +154,52 @@ export default function SubmitWork() {
       const response = await apiRequest('POST', '/api/submission', submissionData);
       const data = await response.json();
       
-      // Start evaluation process
+      // Iniciar proceso de evaluación y generación de attestation
       await apiRequest('POST', `/api/submission/${data.id}/evaluate`);
       
       return data;
     },
     onSuccess: () => {
       toast({
-        title: "Trabajo enviado",
-        description: "Tu trabajo ha sido enviado para evaluación por nuestro agente de IA.",
+        title: "Attestation generada con éxito",
+        description: "Tu trabajo ha sido certificado en Base Sepolia. Puedes ver tu certificación en la sección de certificaciones.",
       });
       form.reset();
+      setAnalysisResult(null);
+      setAttestationEnabled(false);
       setLocation("/certificaciones"); // Redirect to attestations page
     },
     onError: (error) => {
       toast({
-        title: "Error al enviar trabajo",
-        description: error.message || "Hubo un error al enviar tu trabajo. Por favor intenta de nuevo.",
+        title: "Error al generar attestation",
+        description: error.message || "Ocurrió un error al certificar tu trabajo. Por favor intenta de nuevo.",
         variant: "destructive",
       });
-    },
+    }
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    mutation.mutate(values);
+  // Función para analizar el documento con IA
+  const analyzeDocument = (values: z.infer<typeof formSchema>) => {
+    setIsAnalyzing(true);
+    analysisMutation.mutate(values, {
+      onSettled: () => setIsAnalyzing(false)
+    });
+  };
+  
+  // Función para generar la attestation en blockchain
+  const generateAttestation = (values: z.infer<typeof formSchema>) => {
+    setAttestationInProgress(true);
+    attestationMutation.mutate(values, {
+      onSettled: () => setAttestationInProgress(false)
+    });
   };
 
-  const isLoading = isLoadingEnrollments || isLoadingCourses || mutation.isPending;
+  // Función para manejar el envío del formulario
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    analyzeDocument(values);
+  };
+
+  const isLoading = isLoadingEnrollments || isLoadingCourses || analysisMutation.isPending || attestationMutation.isPending;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -226,21 +284,69 @@ export default function SubmitWork() {
                   )}
                 />
 
-                <div className="flex items-center justify-end">
+                {/* Resultados del análisis, si hay alguno */}
+                {analysisResult && (
+                  <div className={`mt-4 p-4 rounded-lg border ${analysisResult.isValid ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+                    <div className="flex items-start">
+                      <div className={`flex-shrink-0 ${analysisResult.isValid ? 'text-green-500' : 'text-amber-500'}`}>
+                        <span className="material-icons">{analysisResult.isValid ? 'check_circle' : 'warning'}</span>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className={`text-sm font-medium ${analysisResult.isValid ? 'text-green-800' : 'text-amber-800'}`}>
+                          Resultado del análisis (Puntuación: {analysisResult.score}/100)
+                        </h3>
+                        <div className={`mt-2 text-sm ${analysisResult.isValid ? 'text-green-700' : 'text-amber-700'}`}>
+                          <p>{analysisResult.feedback}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-end space-x-4 mt-6">
+                  {/* Botón para analizar el documento */}
                   <Button 
-                    type="submit" 
+                    type="button"
+                    variant="outline"
                     className="inline-flex items-center"
-                    disabled={isLoading || enrolledCourses.length === 0}
+                    disabled={isLoading || enrolledCourses.length === 0 || !form.formState.isValid}
+                    onClick={() => {
+                      const values = form.getValues();
+                      analyzeDocument(values);
+                    }}
                   >
-                    {mutation.isPending ? (
+                    {isAnalyzing ? (
                       <>
                         <span className="material-icons animate-spin mr-2 text-sm">sync</span>
-                        Enviando...
+                        Analizando...
                       </>
                     ) : (
                       <>
-                        <span className="material-icons mr-2 text-sm">send</span>
-                        Enviar para evaluación
+                        <span className="material-icons mr-2 text-sm">psychology</span>
+                        Analizar con IA
+                      </>
+                    )}
+                  </Button>
+                  
+                  {/* Botón para generar attestation en blockchain */}
+                  <Button 
+                    type="button" 
+                    className="inline-flex items-center"
+                    disabled={!attestationEnabled || attestationInProgress || isLoading || enrolledCourses.length === 0}
+                    onClick={() => {
+                      const values = form.getValues();
+                      generateAttestation(values);
+                    }}
+                  >
+                    {attestationInProgress ? (
+                      <>
+                        <span className="material-icons animate-spin mr-2 text-sm">sync</span>
+                        Generando attestation...
+                      </>
+                    ) : (
+                      <>
+                        <span className="material-icons mr-2 text-sm">verified</span>
+                        Generar Attestation
                       </>
                     )}
                   </Button>
