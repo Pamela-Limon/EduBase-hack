@@ -27,9 +27,10 @@ export async function connectWallet(): Promise<string> {
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: baseSepoliaChainId }],
           });
-        } catch (switchError) {
+        } catch (error) {
           // This error code indicates that the chain has not been added to MetaMask
-          if (switchError.code === 4902) {
+          const switchError = error as { code: number };
+          if (switchError && switchError.code === 4902) {
             try {
               await window.ethereum.request({
                 method: 'wallet_addEthereumChain',

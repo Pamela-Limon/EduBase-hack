@@ -106,21 +106,15 @@ export default function SubmitWork() {
   // Mutación para el análisis preliminar del documento con IA
   const analysisMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      // En un entorno real, esto llamaría a una API que analiza el documento con OpenAI
+      // Llamamos a la API que analiza el documento con OpenAI
       const analysisData = {
         content: values.content,
         courseId: parseInt(values.courseId)
       };
       
-      // Simulamos una llamada a la API para análisis con OpenAI
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // En producción, esto vendría de la API real
-      return {
-        isValid: true,
-        feedback: "El documento cumple con los criterios científicos requeridos. Se ha detectado una estructura clara, metodología adecuada y conclusiones respaldadas por evidencia.",
-        score: 85
-      };
+      // Llamada real a la API para análisis con OpenAI
+      const response = await apiRequest('POST', '/api/analyze-content', analysisData);
+      return await response.json();
     },
     onSuccess: (data) => {
       setAnalysisResult(data);
@@ -144,6 +138,11 @@ export default function SubmitWork() {
   // Mutación para enviar el trabajo y generar la attestation
   const attestationMutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
+      // Solo permitimos continuar si el análisis fue exitoso
+      if (!attestationEnabled) {
+        throw new Error('El documento no cumple con los criterios para certificación');
+      }
+      
       const submissionData = {
         userId: userData.id,
         courseId: parseInt(values.courseId),
@@ -151,6 +150,7 @@ export default function SubmitWork() {
         content: values.content,
       };
       
+      // Crear la submission primero
       const response = await apiRequest('POST', '/api/submission', submissionData);
       const data = await response.json();
       
