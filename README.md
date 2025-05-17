@@ -1,8 +1,8 @@
-# 🎓 Cohort Craft – Decentralized Education Platform
+# 🎓 EduBase – Decentralized Education Platform
 
-**Cohort Craft** is a decentralized education platform built on the **Base** blockchain. It allows users to log in using digital wallets, receive on-chain attestations for completed courses, and submit academic work evaluated by AI. The project supports the Decentralized Science (**DeSci**) movement.
+**Edu Base ** is a decentralized education platform built on the **Base** blockchain. It allows users to log in using digital wallets, receive on-chain attestations for completed courses, and submit academic work evaluated by AI. The project supports the Decentralized Science (**DeSci**) movement.
 
-![Cohort Craft](/path-to-screenshot.png)
+![EduBase](/path-to-screenshot.png)
 
 ---
 
