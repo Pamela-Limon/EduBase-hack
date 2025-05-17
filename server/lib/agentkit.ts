@@ -30,13 +30,24 @@ let useSimulationMode = true;
 
 // Intentar inicializar la wallet solo si hay una clave privada configurada
 try {
-  if (privateKey && privateKey.startsWith('0x') && privateKey.length === 66) {
-    wallet = new ethers.Wallet(privateKey, provider);
+  if (privateKey) {
+    console.log("Clave privada encontrada, intentando inicializar wallet...");
+    
+    // Limpiar la clave privada por si tiene espacios o caracteres no deseados
+    const cleanedKey = privateKey.trim();
+    
+    // Asegurarse de que la clave comienza con 0x
+    const formattedKey = cleanedKey.startsWith('0x') ? cleanedKey : `0x${cleanedKey}`;
+    
+    console.log(`Formato de clave: ${formattedKey.substring(0, 6)}...${formattedKey.substring(formattedKey.length - 4)} (longitud: ${formattedKey.length})`);
+    
+    wallet = new ethers.Wallet(formattedKey, provider);
     easContract = new ethers.Contract(EAS_CONTRACT_ADDRESS, easAbi, wallet);
     useSimulationMode = false;
-    console.log("Modo blockchain real inicializado correctamente con la clave privada proporcionada");
+    console.log("¡Éxito! Modo blockchain real inicializado correctamente con la clave privada proporcionada");
+    console.log(`Dirección de la wallet: ${wallet.address}`);
   } else {
-    console.log("No se encontró una clave privada válida, usando modo de simulación");
+    console.log("No se encontró una clave privada, usando modo de simulación");
   }
 } catch (error) {
   console.error("Error al inicializar la wallet:", error);
