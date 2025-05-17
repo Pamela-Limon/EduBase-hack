@@ -26,25 +26,21 @@ export default function Navbar() {
                 <span className="ml-2 text-xl font-montserrat font-semibold text-gray-900">EduBase</span>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link href="/">
-                  <a className={`${location === '/' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                    Inicio
-                  </a>
+                <Link href="/" 
+                  className={`${location === '/' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
+                  Inicio
                 </Link>
-                <Link href="/cursos">
-                  <a className={`${location === '/cursos' || location.startsWith('/cursos/') ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                    Cursos
-                  </a>
+                <Link href="/cursos"
+                  className={`${location === '/cursos' || location.startsWith('/cursos/') ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
+                  Cursos
                 </Link>
-                <Link href="/alumnos">
-                  <a className={`${location === '/alumnos' || location.startsWith('/alumnos/') ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                    Alumnos
-                  </a>
+                <Link href="/alumnos"
+                  className={`${location === '/alumnos' || location.startsWith('/alumnos/') ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
+                  Alumnos
                 </Link>
-                <Link href="/certificaciones">
-                  <a className={`${location === '/certificaciones' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
-                    Certificaciones
-                  </a>
+                <Link href="/certificaciones"
+                  className={`${location === '/certificaciones' ? 'border-primary-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}>
+                  Certificaciones
                 </Link>
               </div>
             </div>
@@ -95,25 +91,21 @@ export default function Navbar() {
         {/* Mobile menu */}
         <div className={`sm:hidden ${isOpen ? '' : 'hidden'}`}>
           <div className="pt-2 pb-3 space-y-1">
-            <Link href="/">
-              <a className={`${location === '/' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
-                Inicio
-              </a>
+            <Link href="/"
+              className={`${location === '/' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
+              Inicio
             </Link>
-            <Link href="/cursos">
-              <a className={`${location === '/cursos' || location.startsWith('/cursos/') ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
-                Cursos
-              </a>
+            <Link href="/cursos"
+              className={`${location === '/cursos' || location.startsWith('/cursos/') ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
+              Cursos
             </Link>
-            <Link href="/alumnos">
-              <a className={`${location === '/alumnos' || location.startsWith('/alumnos/') ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
-                Alumnos
-              </a>
+            <Link href="/alumnos"
+              className={`${location === '/alumnos' || location.startsWith('/alumnos/') ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
+              Alumnos
             </Link>
-            <Link href="/certificaciones">
-              <a className={`${location === '/certificaciones' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
-                Certificaciones
-              </a>
+            <Link href="/certificaciones"
+              className={`${location === '/certificaciones' ? 'bg-primary-50 border-primary-500 text-primary-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'} block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}>
+              Certificaciones
             </Link>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">

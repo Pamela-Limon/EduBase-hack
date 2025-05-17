@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { connectWallet, disconnectWallet, getConnectedWallet } from "@/lib/wallet";
 import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 
 interface WalletContextType {
   walletAddress: string | null;
@@ -18,7 +17,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [userData, setUserData] = useState<any | null>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     const checkWalletConnection = async () => {
@@ -56,17 +54,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         console.log("Usuario no encontrado para esta wallet");
       }
       
-      toast({
-        title: "Wallet conectada",
-        description: "Te has conectado exitosamente con tu wallet.",
-      });
+      console.log("Wallet conectada exitosamente");
     } catch (error) {
       console.error("Error connecting wallet:", error);
-      toast({
-        title: "Error al conectar",
-        description: "No se pudo conectar con tu wallet. Por favor intenta de nuevo.",
-        variant: "destructive",
-      });
     } finally {
       setIsConnecting(false);
     }
@@ -76,10 +66,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     disconnectWallet();
     setWalletAddress(null);
     setUserData(null);
-    toast({
-      title: "Wallet desconectada",
-      description: "Has desconectado tu wallet exitosamente.",
-    });
+    console.log("Wallet desconectada exitosamente");
   };
 
   return (
