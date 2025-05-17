@@ -342,12 +342,12 @@ export default function SubmitWork() {
                     {attestationInProgress ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generando attestation...
+                        Generando attestation en Base Sepolia...
                       </>
                     ) : (
                       <>
                         <Check className="mr-2 h-4 w-4" />
-                        Generar Attestation
+                        Generar Certificación en Blockchain
                       </>
                     )}
                   </Button>
