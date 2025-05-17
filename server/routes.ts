@@ -187,6 +187,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Ruta para análisis preliminar del documento
+  app.post(`${api}/analyze-content`, async (req, res) => {
+    try {
+      const { content, courseId } = req.body;
+      
+      if (!content || !courseId) {
+        return res.status(400).json({ message: 'Se requiere contenido y ID del curso' });
+      }
+      
+      // Get course details
+      const course = await storage.getCourse(parseInt(courseId));
+      if (!course) {
+        return res.status(404).json({ message: 'Curso no encontrado' });
+      }
+      
+      // Evaluate content with AI
+      const evaluation = await evaluateSubmission(content, course.title, course.category);
+      
+      // Return analysis results
+      return res.json({
+        isValid: evaluation.score >= 70,
+        feedback: evaluation.feedback,
+        score: evaluation.score
+      });
+    } catch (error) {
+      return res.status(500).json({ message: 'Error al analizar contenido', error: error.message });
+    }
+  });
+
   app.post(`${api}/submission/:id/evaluate`, async (req, res) => {
     try {
       const submission = await storage.getSubmission(parseInt(req.params.id));
