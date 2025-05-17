@@ -14,49 +14,69 @@ export async function connectWallet(): Promise<string> {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     
     if (accounts && accounts.length > 0) {
-      // Check if we're on Base Sepolia
-      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      console.log("Conectado a la cuenta:", accounts[0]);
       
-      // Base Sepolia Testnet: 0x14a34 (84532)
-      const baseSepoliaChainId = '0x14a34'; 
-      
-      if (chainId !== baseSepoliaChainId) {
-        // Try to switch to Base Sepolia
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: baseSepoliaChainId }],
-          });
-        } catch (error) {
-          // This error code indicates that the chain has not been added to MetaMask
-          const switchError = error as { code: number };
-          if (switchError && switchError.code === 4902) {
-            try {
-              await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [
-                  {
-                    chainId: baseSepoliaChainId,
-                    chainName: 'Base Sepolia Testnet',
-                    nativeCurrency: {
-                      name: 'ETH',
-                      symbol: 'ETH',
-                      decimals: 18
-                    },
-                    rpcUrls: ['https://sepolia.base.org'],
-                    blockExplorerUrls: ['https://sepolia.basescan.org']
-                  }
-                ],
-              });
-            } catch (addError) {
-              throw new Error("No se pudo agregar la red Base Sepolia a tu wallet.");
+      try {
+        // Check if we're on Base Sepolia
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        console.log("Current chainId:", chainId);
+        
+        // Base Sepolia Testnet: 0x14a34 (84532)
+        const baseSepoliaChainId = '0x14a34'; 
+        
+        if (chainId !== baseSepoliaChainId) {
+          console.log("Intentando cambiar a Base Sepolia...");
+          // Try to switch to Base Sepolia
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: baseSepoliaChainId }],
+            });
+            console.log("Cambio de red exitoso!");
+          } catch (error: any) {
+            // This error code indicates that the chain has not been added to MetaMask
+            console.log("Error al cambiar de red:", error);
+            
+            if (error.code === 4902) {
+              console.log("Red no encontrada, intentando agregarla...");
+              try {
+                await window.ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [
+                    {
+                      chainId: baseSepoliaChainId,
+                      chainName: 'Base Sepolia Testnet',
+                      nativeCurrency: {
+                        name: 'ETH',
+                        symbol: 'ETH',
+                        decimals: 18
+                      },
+                      rpcUrls: ['https://sepolia.base.org'],
+                      blockExplorerUrls: ['https://sepolia.basescan.org']
+                    }
+                  ],
+                });
+                console.log("Base Sepolia agregada exitosamente!");
+              } catch (addError) {
+                console.error("Error al agregar Base Sepolia:", addError);
+                throw new Error("No se pudo agregar la red Base Sepolia a tu wallet.");
+              }
+            } else {
+              console.error("Error desconocido al cambiar de red:", error);
+              // Continue even if we couldn't switch networks
+              console.log("Continuando sin cambiar de red...");
             }
-          } else {
-            throw switchError;
           }
+        } else {
+          console.log("Ya estamos en Base Sepolia!");
         }
+      } catch (networkError) {
+        console.error("Error al verificar o cambiar la red:", networkError);
+        // Continue even if we couldn't switch networks
+        console.log("Continuando sin verificar red...");
       }
       
+      // Return the connected account even if network switch failed
       return accounts[0];
     } else {
       throw new Error("No se pudo obtener acceso a las cuentas.");

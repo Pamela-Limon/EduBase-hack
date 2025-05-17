@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
+import { Wallet, Loader2 } from "lucide-react";
 
 interface ConnectWalletModalProps {
   open: boolean;
@@ -27,7 +28,7 @@ export function ConnectWalletModal({ open, onOpenChange }: ConnectWalletModalPro
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary-100">
-            <span className="material-icons text-primary-600">account_balance_wallet</span>
+            <Wallet className="h-6 w-6 text-primary-600" />
           </div>
           <DialogTitle className="text-center mt-3 text-lg font-medium text-gray-900 font-montserrat">
             Conectar Smart Wallet
@@ -44,7 +45,7 @@ export function ConnectWalletModal({ open, onOpenChange }: ConnectWalletModalPro
           >
             <span className="mr-2">Conectar con Base Wallet</span>
             {isConnecting && (
-              <span className="material-icons animate-spin text-sm">sync</span>
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
             )}
           </Button>
           <Button 
@@ -55,7 +56,7 @@ export function ConnectWalletModal({ open, onOpenChange }: ConnectWalletModalPro
           >
             <span className="mr-2">Conectar con MetaMask</span>
             {isConnecting && (
-              <span className="material-icons animate-spin text-sm">sync</span>
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
             )}
           </Button>
           <Button 
@@ -66,7 +67,7 @@ export function ConnectWalletModal({ open, onOpenChange }: ConnectWalletModalPro
           >
             <span className="mr-2">Wallet Connect</span>
             {isConnecting && (
-              <span className="material-icons animate-spin text-sm">sync</span>
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
             )}
           </Button>
         </div>
