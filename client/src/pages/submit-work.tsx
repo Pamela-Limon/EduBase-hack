@@ -323,6 +323,41 @@ export default function SubmitWork() {
                     </div>
                   </div>
                 )}
+                
+                {/* Mostrar el hash de transacción si existe */}
+                {transactionHash && (
+                  <div className="mt-4 p-4 rounded-lg border bg-blue-50 border-blue-200">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 text-blue-500">
+                        <CheckCircle className="h-5 w-5" />
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-blue-800">
+                          ¡Attestation generada con éxito en Base Sepolia!
+                        </h3>
+                        <div className="mt-2 text-sm text-blue-700">
+                          <p className="font-semibold">Hash de transacción:</p>
+                          <code className="block p-2 mt-1 bg-white rounded border border-blue-200 text-xs break-all">
+                            {transactionHash}
+                          </code>
+                          <div className="mt-2">
+                            <a 
+                              href={`https://sepolia.basescan.org/tx/${transactionHash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-blue-600 hover:text-blue-800"
+                            >
+                              Ver en Base Sepolia Explorer
+                              <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-end space-x-4 mt-6">
                   {/* Botón para analizar el documento */}
