@@ -247,7 +247,7 @@ export default function SubmitWork() {
                       <Select 
                         onValueChange={field.onChange} 
                         defaultValue={field.value}
-                        disabled={isLoading || enrolledCourses.length === 0}
+                        disabled={isLoading}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -255,7 +255,7 @@ export default function SubmitWork() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {enrolledCourses.map((course: Course) => (
+                          {courses.map((course: Course) => (
                             <SelectItem key={course.id} value={course.id.toString()}>
                               {course.title}
                             </SelectItem>
