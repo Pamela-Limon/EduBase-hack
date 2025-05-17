@@ -47,6 +47,7 @@ export default function SubmitWork() {
   }>(null);
   const [attestationEnabled, setAttestationEnabled] = useState(false);
   const [attestationInProgress, setAttestationInProgress] = useState(false);
+  const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const { isConnected, userData } = useWallet();
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
@@ -156,19 +157,38 @@ export default function SubmitWork() {
       const data = await response.json();
       
       // Iniciar proceso de evaluación y generación de attestation
-      await apiRequest('POST', `/api/submission/${data.id}/evaluate`);
+      const attestationResponse = await apiRequest('POST', `/api/submission/${data.id}/evaluate`);
+      const attestationData = await attestationResponse.json();
       
-      return data;
+      // Obtener las attestations generadas para este usuario
+      const attestationsResponse = await apiRequest('GET', `/api/attestations/user/${userData.id}`);
+      const attestations = await attestationsResponse.json();
+      
+      // Obtener la última attestation generada (que debería ser la que acabamos de crear)
+      const latestAttestation = attestations[attestations.length - 1];
+      if (latestAttestation && latestAttestation.transactionId) {
+        setTransactionHash(latestAttestation.transactionId);
+      }
+      
+      return { ...data, latestAttestation };
     },
-    onSuccess: () => {
-      toast({
-        title: "Attestation generada con éxito",
-        description: "Tu trabajo ha sido certificado en Base Sepolia. Puedes ver tu certificación en la sección de certificaciones.",
-      });
+    onSuccess: (data) => {
+      if (data.latestAttestation?.transactionId) {
+        toast({
+          title: "Attestation generada con éxito",
+          description: `Tu trabajo ha sido certificado en Base Sepolia. Hash de transacción: ${data.latestAttestation.transactionId.substring(0, 10)}...`,
+        });
+      } else {
+        toast({
+          title: "Attestation generada con éxito",
+          description: "Tu trabajo ha sido certificado en Base Sepolia. Puedes ver tu certificación en la sección de certificaciones.",
+        });
+      }
       form.reset();
       setAnalysisResult(null);
       setAttestationEnabled(false);
-      setLocation("/certificaciones"); // Redirect to attestations page
+      // No redirigimos automáticamente para que el usuario pueda ver el hash de transacción
+      // setLocation("/certificaciones");
     },
     onError: (error) => {
       toast({
