@@ -310,7 +310,7 @@ export default function SubmitWork() {
                     type="button"
                     variant="outline"
                     className="inline-flex items-center"
-                    disabled={isLoading || enrolledCourses.length === 0 || !form.formState.isValid}
+                    disabled={isLoading || !form.formState.isValid}
                     onClick={() => {
                       const values = form.getValues();
                       analyzeDocument(values);
@@ -333,7 +333,7 @@ export default function SubmitWork() {
                   <Button 
                     type="button" 
                     className="inline-flex items-center"
-                    disabled={!attestationEnabled || attestationInProgress || isLoading || enrolledCourses.length === 0}
+                    disabled={!attestationEnabled || attestationInProgress || isLoading}
                     onClick={() => {
                       const values = form.getValues();
                       generateAttestation(values);
