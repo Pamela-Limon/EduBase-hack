@@ -256,27 +256,35 @@ export class MemStorage implements IStorage {
   private initializeSampleCourses() {
     const sampleCourses: InsertCourse[] = [
       {
-        title: 'Desarrollo Blockchain Avanzado',
-        description: 'Aprende a desarrollar aplicaciones descentralizadas en Base y emitir attestations para certificar conocimientos.',
-        category: 'Blockchain',
+        title: 'DeSci: Fundamentos de Ciencia Descentralizada',
+        description: 'Introducción a los principios de la ciencia descentralizada (DeSci) y cómo está transformando la investigación académica en la Web3.',
+        category: 'DeSci',
         imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97',
         duration: '8 semanas',
+        rating: '4.7'
+      },
+      {
+        title: 'Redacción y Publicación Científica en Web3',
+        description: 'Aprende a preparar, redactar y publicar investigaciones científicas utilizando plataformas descentralizadas con verificación mediante attestations en blockchain.',
+        category: 'Investigación Científica',
+        imageUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d',
+        duration: '6 semanas',
         rating: '4.5'
       },
       {
-        title: 'Redacción Científica Avanzada',
-        description: 'Domina las técnicas de escritura científica y académica con evaluación por IA para mejorar tus publicaciones.',
-        category: 'Investigación',
-        imageUrl: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d',
-        duration: '6 semanas',
-        rating: '4.0'
+        title: 'Attestations Científicas en Base Sepolia',
+        description: 'Certifica la validez y autoría de tus investigaciones científicas mediante attestations verificables en Base Sepolia y otras redes blockchain.',
+        category: 'Certificación Científica',
+        imageUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485',
+        duration: '5 semanas',
+        rating: '4.8'
       },
       {
-        title: 'IA en Blockchain',
-        description: 'Explora la integración de IA con tecnologías blockchain para crear sistemas descentralizados inteligentes.',
-        category: 'IA',
-        imageUrl: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485',
-        duration: '10 semanas',
+        title: 'IA en Validación de Investigaciones Científicas',
+        description: 'Utiliza modelos de IA para validar, analizar y mejorar la calidad de trabajos científicos antes de su publicación y certificación en blockchain.',
+        category: 'IA para Ciencia',
+        imageUrl: 'https://images.unsplash.com/photo-1581089781785-603411fa81e5',
+        duration: '7 semanas',
         rating: '4.9'
       }
     ];

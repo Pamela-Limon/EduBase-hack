@@ -38,6 +38,14 @@ const formSchema = z.object({
 
 export default function SubmitWork() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<null | {
+    isValid: boolean;
+    feedback: string;
+    score: number;
+  }>(null);
+  const [attestationEnabled, setAttestationEnabled] = useState(false);
+  const [attestationInProgress, setAttestationInProgress] = useState(false);
   const { isConnected, userData } = useWallet();
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
