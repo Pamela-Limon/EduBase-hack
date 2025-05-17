@@ -9,6 +9,7 @@ import { ConnectWalletModal } from "@/components/ConnectWalletModal";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { Course, Enrollment } from "@shared/schema";
+import { Brain, Check, Loader2, CheckCircle, AlertTriangle } from "lucide-react";
 
 import {
   Form,
@@ -289,7 +290,7 @@ export default function SubmitWork() {
                   <div className={`mt-4 p-4 rounded-lg border ${analysisResult.isValid ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
                     <div className="flex items-start">
                       <div className={`flex-shrink-0 ${analysisResult.isValid ? 'text-green-500' : 'text-amber-500'}`}>
-                        <span className="material-icons">{analysisResult.isValid ? 'check_circle' : 'warning'}</span>
+                        {analysisResult.isValid ? <CheckCircle className="h-5 w-5" /> : <AlertTriangle className="h-5 w-5" />}
                       </div>
                       <div className="ml-3">
                         <h3 className={`text-sm font-medium ${analysisResult.isValid ? 'text-green-800' : 'text-amber-800'}`}>
@@ -317,12 +318,12 @@ export default function SubmitWork() {
                   >
                     {isAnalyzing ? (
                       <>
-                        <span className="material-icons animate-spin mr-2 text-sm">sync</span>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Analizando...
                       </>
                     ) : (
                       <>
-                        <span className="material-icons mr-2 text-sm">psychology</span>
+                        <Brain className="mr-2 h-4 w-4" />
                         Analizar con IA
                       </>
                     )}
@@ -340,12 +341,12 @@ export default function SubmitWork() {
                   >
                     {attestationInProgress ? (
                       <>
-                        <span className="material-icons animate-spin mr-2 text-sm">sync</span>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         Generando attestation...
                       </>
                     ) : (
                       <>
-                        <span className="material-icons mr-2 text-sm">verified</span>
+                        <Check className="mr-2 h-4 w-4" />
                         Generar Attestation
                       </>
                     )}
