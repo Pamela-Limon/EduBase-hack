@@ -14,10 +14,10 @@ const easAbi = [
   "function getAttestation(bytes32 uid) external view returns (tuple(bytes32 uid, bytes32 schema, address recipient, address attester, bool revocable, bytes32 refUID, bytes data, uint64 timestamp))"
 ];
 
-// Contrato EAS en Base Sepolia
-const EAS_CONTRACT_ADDRESS = "0x4200000000000000000000000000000000000021";
-// Schema ID para nuestras attestations educativas
-const SCHEMA_ID = "0x4200000000000000000000000000000000000001";
+// Contrato EAS en Base Sepolia Testnet
+const EAS_CONTRACT_ADDRESS = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Dirección real del contrato EAS en Base Sepolia
+// Schema ID para nuestras attestations educativas (schema básico genérico para pruebas)
+const SCHEMA_ID = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 // Proveedor de Base Sepolia
 const provider = new ethers.providers.JsonRpcProvider("https://sepolia.base.org");
